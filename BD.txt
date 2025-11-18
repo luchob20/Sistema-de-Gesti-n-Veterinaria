@@ -1,0 +1,87 @@
+CREATE TABLE duenos (
+    id_dueno SERIAL PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    telefono VARCHAR(20),
+    email VARCHAR(100),
+    direccion VARCHAR(150)
+);
+
+CREATE TABLE mascotas (
+    id_mascota SERIAL PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    especie VARCHAR(50) NOT NULL,
+    raza VARCHAR(50),
+    color VARCHAR(50),
+    edad INTEGER,
+    peso NUMERIC(5,2),
+    id_dueno INTEGER NOT NULL,
+    CONSTRAINT fk_mascota_dueno
+        FOREIGN KEY (id_dueno)
+        REFERENCES duenos(id_dueno)
+        ON DELETE CASCADE
+);
+
+CREATE TABLE veterinarios (
+    id_veterinario SERIAL PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    telefono VARCHAR(20),
+    email VARCHAR(100),
+    especialidad VARCHAR(100)
+);
+
+CREATE TABLE citas (
+    id_cita SERIAL PRIMARY KEY,
+    id_mascota INTEGER NOT NULL,
+    id_veterinario INTEGER NOT NULL,
+    fecha DATE NOT NULL,
+    hora TIME NOT NULL,
+    motivo VARCHAR(255),
+    CONSTRAINT fk_cita_mascota
+        FOREIGN KEY (id_mascota)
+        REFERENCES mascotas(id_mascota)
+        ON DELETE CASCADE,
+    CONSTRAINT fk_cita_veterinario
+        FOREIGN KEY (id_veterinario)
+        REFERENCES veterinarios(id_veterinario)
+        ON DELETE CASCADE
+);
+
+INSERT INTO duenos (nombre, telefono, email, direccion) VALUES
+('Carlos López', '3001234567', 'carlos@gmail.com', 'Calle 10 #5-15'),
+('Laura Méndez', '3019876543', 'laura@gmail.com', 'Carrera 7 #20-35'),
+('Andrés Ríos', '3175558899', 'andresrios@hotmail.com', 'Av. Central #45-70'),
+('Diana Torres', '3112209988', 'dianatorres@outlook.com', 'Barrio La Esperanza, MZ 12'),
+('Jorge Martínez', '3057763421', 'jmartinez@gmail.com', 'Calle 52 #12-09'),
+('Valentina Ruiz', '3104529982', 'valeruiz@gmail.com', 'Conjunto Los Álamos, Torre 3');
+
+INSERT INTO veterinarios (nombre, telefono, email, especialidad) VALUES
+('Dr. Gómez', '3201112233', 'gomez@vet.com', 'Cirugía'),
+('Dra. Pérez', '3109998877', 'perez@vet.com', 'Dermatología'),
+('Dr. Ramírez', '3125587421', 'ramirez@vet.com', 'Medicina interna'),
+('Dra. Lucía Herrera', '3157809943', 'lherrera@vet.com', 'Odontología animal'),
+('Dr. Santiago León', '3186658903', 'sleon@vet.com', 'Ortopedia'),
+('Dra. Camila Ordoñez', '3119017753', 'camilaordonez@vet.com', 'Exóticos');
+
+INSERT INTO mascotas (nombre, especie, raza, color, edad, peso, id_dueno) VALUES
+('Firulais', 'Perro', 'Labrador', 'Marrón', 4, 22.5, 1),
+('Michi', 'Gato', 'Siames', 'Gris', 2, 5.3, 2),
+('Rocco', 'Perro', 'Pitbull', 'Blanco', 3, 28.7, 3),
+('Luna', 'Gato', 'Angora', 'Blanco', 1, 3.9, 4),
+('Toby', 'Perro', 'Golden Retriever', 'Dorado', 6, 30.2, 5),
+('Nala', 'Gato', 'Bengala', 'Naranja', 2, 4.8, 6),
+('Bruno', 'Perro', 'Pastor Alemán', 'Negro', 5, 32.1, 1),
+('Copo', 'Conejo', 'Enano', 'Blanco', 1, 1.2, 2),
+('Kiara', 'Perro', 'Poodle', 'Blanco', 7, 12.4, 4),
+('Max', 'Gato', 'Criollo', 'Atigrado', 3, 4.1, 3);
+
+INSERT INTO citas (id_mascota, id_veterinario, fecha, hora, motivo) VALUES
+(1, 1, '2025-02-15', '09:00', 'Chequeo general'),
+(2, 2, '2025-02-16', '14:30', 'Revisión de piel'),
+(3, 5, '2025-03-01', '10:00', 'Dolor en pata trasera'),
+(4, 3, '2025-03-02', '11:30', 'Fiebre y vómito'),
+(5, 1, '2025-03-05', '08:00', 'Control post-operatorio'),
+(6, 6, '2025-03-07', '16:00', 'Revisión por caída'),
+(7, 5, '2025-03-10', '09:45', 'Problema de movilidad'),
+(8, 4, '2025-03-12', '13:20', 'Chequeo dental'),
+(9, 2, '2025-03-15', '15:40', 'Dermatitis leve'),
+(10, 3, '2025-03-20', '10:15', 'Consulta general por inapetencia');
